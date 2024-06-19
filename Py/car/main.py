@@ -5,6 +5,13 @@ root.title('Car_Game')
 root.geometry('800x450')
 root['bg'] = 'black'
 
+def save(login,password):
+    s = {login:{"pasword":password}}
+    with open("profile.txt","w+") as f:
+        s = eval(f.read())
+        if s.type() == dict:
+            if login in s:
+                print("OK")
 def root1():
 
     root.destroy()
