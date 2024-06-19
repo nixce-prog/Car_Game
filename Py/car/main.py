@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import messagebox  # Импорт модуля messagebox для показа диалоговых окон
+from tkinter import messagebox  
 import os.path
 from PIL import Image, ImageTk
 import json
@@ -16,9 +16,9 @@ class Player():
                 try:
                     s = json.load(f)
                 except json.JSONDecodeError:
-                    s = {}  # Если файл пуст или содержит некорректные данные, создаем пустой словарь
-                    f.seek(0)  # Смещаем указатель файла в начало
-                    f.truncate()  # Очищаем файл
+                    s = {}  
+                    f.seek(0) 
+                    f.truncate()
 
                 if login in s:
                     if s[login]["password"] == password:
@@ -82,7 +82,7 @@ def translate():
     global login_value, password_value, player
     login_value = login.get()
     password_value = password.get()
-    player = Player(login_value, password_value)  # Инициализируем экземпляр Player с введенными логином и паролем
+    player = Player(login_value, password_value)
     if player.account_created:
         reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
         reglb.place(x=15, y=20)
@@ -98,12 +98,12 @@ def show_statistics():
     try:
         with open("profile.txt", "r") as f:
             s = json.load(f)
-            if player.info["login"] in s:  # Используем информацию о логине из объекта Player
+            if player.info["login"] in s: 
                 player_stats = s[player.info["login"]]
                 stats_text = f"Статистика игрока {player.info['login']}:\n"
                 stats_text += f"Пароль: {player.info['password']}\n"
                 for key, value in player_stats.items():
-                    if key != 'password':  # Пропускаем отображение пароля повторно
+                    if key != 'password': 
                         stats_text += f"{key}: {value}\n"
                 messagebox.showinfo('Статистика игрока', stats_text)
             else:
