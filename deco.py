@@ -36,35 +36,3 @@ class Tools():
                         print(args+tuple((x,kwargs[x]) for x in kwargs))
             return wrapper
         return log
-    
-
-
-import multiprocessing
-import time
-import math
-import numpy as np
-import numba
-import sys
-import struct
-
-def sieve(n):
-    flags = np.ones(n, dtype=bool)
-    flags[0] = flags[1] = False
-    for i in range(2, int(math.sqrt(n))+1):
-        # We could use a lower upper bound for this loop, but I don't want to bother with
-        # getting the rounding right on the sqrt handling.
-        if flags[i]:
-            flags[i*i::i] = False
-    return np.flatnonzero(flags)
-
-
-
-if __name__ == "__main__":
-    start = perf_counter()
-    t = sieve(1_000_000_000)
-    end = perf_counter()
-    print(end-start)
-    with open("textprime.txt","a") as f:
-        for x in t:
-            f.write(str(x))
-
