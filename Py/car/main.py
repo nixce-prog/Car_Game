@@ -31,12 +31,18 @@ def save(login,password):
                 if type(s) == dict:
                     if login in s:
                         if str(s[login]["pasword"]) == password:
-                            root1()
+                            checkbtn.destroy()
+                            nxbtn = Button(root,text='Продолжить',font=('Italic', 12),command=root1,bg='green',fg='black',activebackground='green',activeforeground='white')
+                            nxbtn.place(x=360, y=310)
                     else:
                         f.seek(0)
                         f.truncate()
                         s[login] = {"pasword":str(password)}
                         f.write(str(s))
+                        reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
+                        reglb.place(x=15,y=20)
+                        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green', fg='black',activebackground='green', activeforeground='white')
+                        nxbtn.place(x=360, y=310)
     else:
         with open("profile.txt","w+") as f:
             f.seek(0)
