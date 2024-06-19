@@ -22,7 +22,7 @@ def root1():
     root1['bg'] = 'black'
     root1.mainloop()
 
-image_path = r"C:\Users\mcajk\OneDrive\Документы\Py\car\login.gif"
+image_path = r"login.gif"
 tk_image = PhotoImage(file=image_path)
 
 image_label = Label(root, image=tk_image)
