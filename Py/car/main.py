@@ -7,6 +7,13 @@ root['bg'] = 'black'
 
 def root1():
 
+    root.destroy()
+
+    root1 = Tk()
+    root1.title('Car_Game')
+    root1.geometry('800x450')
+    root1['bg'] = 'black'
+    root1.mainloop()
 
 image_path = r"C:\Users\mcajk\OneDrive\Документы\Py\car\login.gif"
 tk_image = PhotoImage(file=image_path)
@@ -27,7 +34,7 @@ password.place(x=250,y=260)
 accept = Button(root,
                 text='Принять',
                 font=('Italic', 12),
-                command= ,
+                command=root1,
                 bg='grey',
                 fg='black',
                 activebackground='green',
