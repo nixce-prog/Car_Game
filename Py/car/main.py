@@ -19,20 +19,22 @@ def root1():
 def tranlate():
     log = login.get()
     pas = password.get()
-    print(log)
-    print(pas)
-    root1()
+    save(log,pas)
     
 
 def save(login,password):
+
     with open("profile.txt","r+") as f:
-        s = eval(f.read())
-        if type(s) == dict:
-            if login in s:
-                if s[login]["pasword"] == password:
-                    print("OK")
-        else:
-            f.write(str({login:{"pasword":password}}))
+            s = eval(f.read())
+            if type(s) == dict:
+                if login in s:
+                    if str(s[login]["pasword"]) == password:
+                        root1()
+                else:
+                    f.seek(0)
+                    f.truncate()
+                    s[login] = {"pasword":str(password)}
+                    f.write(str(s))
             
 
 image_path = r"login.gif"
