@@ -1,7 +1,9 @@
 from tkinter import *
+from tkinter import messagebox  # Импорт модуля messagebox для показа диалоговых окон
 import os.path
 from PIL import Image, ImageTk
 import json
+
 
 class Player():
     default = [("money", 0, int), ("win", 0, str), ("password", "0000", str), ("bad", 0, int)]
@@ -11,7 +13,13 @@ class Player():
         info = {}
         if os.path.isfile("profile.txt"):
             with open("profile.txt", "r+") as f:
-                s = json.load(f)
+                try:
+                    s = json.load(f)
+                except json.JSONDecodeError:
+                    s = {}  # Если файл пуст или содержит некорректные данные, создаем пустой словарь
+                    f.seek(0)  # Смещаем указатель файла в начало
+                    f.truncate()  # Очищаем файл
+
                 if login in s:
                     if s[login]["password"] == password:
                         if len(s[login]) == len(Player.default) + 1:
@@ -24,10 +32,7 @@ class Player():
                             f.seek(0)
                             f.truncate()
                             json.dump(s, f)
-                        checkbtn.destroy()
-                        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
-                                       fg='black', activebackground='green', activeforeground='white')
-                        nxbtn.place(x=360, y=310)
+                        self.account_created = True
                 else:
                     f.seek(0)
                     f.truncate()
@@ -35,48 +40,76 @@ class Player():
                     info["password"] = password
                     s[login] = info
                     json.dump(s, f)
-                    reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
-                    reglb.place(x=15, y=20)
-                    nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
-                                   fg='black', activebackground='green', activeforeground='white')
-                    nxbtn.place(x=360, y=310)
+                    self.account_created = True
         else:
             with open("profile.txt", "w+") as f:
                 info = Player.info_d
                 info["password"] = password
                 json.dump({login: info}, f)
+                self.account_created = True
 
         g = {x[0]: x[2] for x in Player.default}
         self.info = {x[0]: g[x[0]](info.get(x[0], x[1])) for x in info.items()}
+        self.info["login"] = login
+
 
 
 def root1():
+    global root, game_window
     root.destroy()
 
-    root1 = Tk()
-    root1.title('Car Game')
-    root1.geometry('800x450')
-    root1.resizable(False, False)
+    game_window = Tk()
+    game_window.title('Car Game')
+    game_window.geometry('800x450')
+    game_window.resizable(False, False)
 
     bg_image = Image.open('bg.png')
     bg_photo = ImageTk.PhotoImage(bg_image)
-    bg_label = Label(root1, image=bg_photo)
+    bg_label = Label(game_window, image=bg_photo)
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-    playbtn = Button(root1, text='Играть', font=('italic', 15), width=15, height=4)
+    playbtn = Button(game_window, text='Играть', font=('italic', 15), width=15, height=4)
     playbtn.place(x=600, y=320)
-    storebtn = Button(root1, text='Магазин', font=('italic', 15), width=13, height=2)
+    storebtn = Button(game_window, text='Магазин', font=('italic', 15), width=13, height=2)
     storebtn.place(x=621, y=250)
-    statsbtn = Button(root1, text='Статистика', font=('italic', 15), width=12, height=2)
+    statsbtn = Button(game_window, text='Статистика', font=('italic', 15), width=12, height=2, command=show_statistics)
     statsbtn.place(x=25, y=366)
 
-    root1.mainloop()
+    game_window.mainloop()
 
 
 def translate():
-    log = login.get()
-    pas = password.get()
-    Player(log, pas)
+    global login_value, password_value, player
+    login_value = login.get()
+    password_value = password.get()
+    player = Player(login_value, password_value)  # Инициализируем экземпляр Player с введенными логином и паролем
+    if player.account_created:
+        reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
+        reglb.place(x=15, y=20)
+        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
+                       fg='black', activebackground='green', activeforeground='white')
+        nxbtn.place(x=360, y=310)
+    else:
+        messagebox.showinfo('Ошибка', 'Неправильный логин или пароль.')
+
+
+def show_statistics():
+    global player
+    try:
+        with open("profile.txt", "r") as f:
+            s = json.load(f)
+            if player.info["login"] in s:  # Используем информацию о логине из объекта Player
+                player_stats = s[player.info["login"]]
+                stats_text = f"Статистика игрока {player.info['login']}:\n"
+                stats_text += f"Пароль: {player.info['password']}\n"
+                for key, value in player_stats.items():
+                    if key != 'password':  # Пропускаем отображение пароля повторно
+                        stats_text += f"{key}: {value}\n"
+                messagebox.showinfo('Статистика игрока', stats_text)
+            else:
+                messagebox.showinfo('Ошибка', 'Игрок не найден.')
+    except FileNotFoundError:
+        messagebox.showinfo('Ошибка', 'Файл профиля не найден.')
 
 
 if __name__ == "__main__":
