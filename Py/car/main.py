@@ -5,6 +5,25 @@ root.title('Car_Game')
 root.geometry('800x450')
 root['bg'] = 'black'
 
+
+def root1():
+
+    root.destroy()
+
+    root1 = Tk()
+    root1.title('Car_Game')
+    root1.geometry('800x450')
+    root1['bg'] = 'black'
+    root1.mainloop()
+
+def tranlate():
+    log = login.get()
+    pas = password.get()
+    print(log)
+    print(pas)
+    root1()
+    
+
 def save(login,password):
     with open("profile.txt","r+") as f:
         s = eval(f.read())
@@ -15,15 +34,6 @@ def save(login,password):
         else:
             f.write(str({login:{"pasword":password}}))
             
-def root1():
-
-    root.destroy()
-
-    root1 = Tk()
-    root1.title('Car_Game')
-    root1.geometry('800x450')
-    root1['bg'] = 'black'
-    root1.mainloop()
 
 image_path = r"login.gif"
 tk_image = PhotoImage(file=image_path)
@@ -41,16 +51,16 @@ password = Entry(root,
               )
 password.place(x=250,y=260)
 
-accept = Button(root,
-                text='Принять',
+checkbtn = Button(root,
+                text='Проверить',
                 font=('Italic', 12),
-                command=root1,
+                command=tranlate,
                 bg='grey',
                 fg='black',
                 activebackground='green',
                 activeforeground='white'
                 )
-accept.place(x=360, y=310)
+checkbtn.place(x=360, y=310)
 
 lb_login = Label(root, text='Логин:', font=('Italic', 12), bg='black', fg='white')
 lb_login.place(x=190,y=215)
