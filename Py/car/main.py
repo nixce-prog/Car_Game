@@ -1,4 +1,5 @@
 from tkinter import *
+import os.path
 
 root = Tk()
 root.title('Car_Game')
@@ -24,17 +25,23 @@ def tranlate():
 
 def save(login,password):
 
-    with open("profile.txt","r+") as f:
-            s = eval(f.read())
-            if type(s) == dict:
-                if login in s:
-                    if str(s[login]["pasword"]) == password:
-                        root1()
-                else:
-                    f.seek(0)
-                    f.truncate()
-                    s[login] = {"pasword":str(password)}
-                    f.write(str(s))
+    if os.path.isfile("profile.txt"):
+        with open("profile.txt","r+") as f:
+                s = eval(f.read())
+                if type(s) == dict:
+                    if login in s:
+                        if str(s[login]["pasword"]) == password:
+                            root1()
+                    else:
+                        f.seek(0)
+                        f.truncate()
+                        s[login] = {"pasword":str(password)}
+                        f.write(str(s))
+    else:
+        with open("profile.txt","w+") as f:
+            f.seek(0)
+            f.truncate()
+            f.write(str({login:{"pasword":str(password)}}))
             
 
 image_path = r"login.gif"
