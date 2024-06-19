@@ -6,12 +6,15 @@ root.geometry('800x450')
 root['bg'] = 'black'
 
 def save(login,password):
-    s = {login:{"pasword":password}}
-    with open("profile.txt","w+") as f:
+    with open("profile.txt","r+") as f:
         s = eval(f.read())
-        if s.type() == dict:
+        if type(s) == dict:
             if login in s:
-                print("OK")
+                if s[login]["pasword"] == password:
+                    print("OK")
+        else:
+            f.write(str({login:{"pasword":password}}))
+            
 def root1():
 
     root.destroy()
