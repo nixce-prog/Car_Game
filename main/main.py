@@ -14,6 +14,12 @@ def root1():
         root1.destroy()
         roots()
 
+
+    def r2_destr():
+        root1.destroy()
+        store()
+
+
     bg_image = Image.open(r'bg.png')
     bg_photo = ImageTk.PhotoImage(bg_image)
     bg_label = Label(root1, image=bg_photo)
@@ -21,12 +27,48 @@ def root1():
 
     playbtn = Button(root1, text='Играть', font=('italic', 15), width=15, height=4)
     playbtn.place(x=600, y=320)
-    storebtn = Button(root1, text='Магазин', font=('italic', 15), width=13, height=2)
+    storebtn = Button(root1, text='Магазин', font=('italic', 15),command=r2_destr, width=13, height=2)
     storebtn.place(x=621, y=250)
     statsbtn = Button(root1, text='Статистика', font=('italic', 15),command=r_destr, width=12, height=2)
     statsbtn.place(x=25, y=366)
 
     root1.mainloop()
+
+
+def store():
+    store = Tk()
+    store.title('Car Shop')
+    store.geometry('800x450')
+    store['bg'] = 'grey'
+
+    def rdestr():
+        store.destroy()
+        root1()
+
+    lb_bg1 = Label(store, bg='black', width=34, height=20)
+    lb_bg1.place(x=45, y=35)
+    lb_bg2 = Label(store, bg='black', width=34, height=20)
+    lb_bg2.place(x=350, y=35)
+
+    bg_image = Image.open(r'dodge.png')
+    bg_photo = ImageTk.PhotoImage(bg_image)
+    bg_label = Label(store, image=bg_photo, width=170)
+    bg_label.place(x=80, y=60)
+
+    car_pho2 = Image.open(r'lambo.png')
+    car_photo2 = ImageTk.PhotoImage(car_pho2)
+    Lb = Label(store, image=car_photo2, width=170, height=130)
+    Lb.place(x=380, y=60)
+
+    buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
+                   width=9)
+    buydg.place(x=180, y=280)
+    buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
+                     width=9)
+    buylamb.place(x=480, y=280)
+    back = Button(store, text='Назад', command=rdestr, width=10, height=2)
+    back.place(x=45, y=380)
+    store.mainloop()
 
 
 def roots():
