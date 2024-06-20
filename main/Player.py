@@ -16,6 +16,7 @@ class Player():
     info_d = {x[0]: x[2](x[1]) for x in default}
 
     def __init__(self, login, password):
+        self.busy = 0
         info = {}
         if os.path.isfile("profile.json"):
             with open("profile.json", "r+") as f:
@@ -77,9 +78,9 @@ class Player():
             self.info['money'] -= Player.car_all[car]
             self.info["car"][car] = True
             self.save()
-            return "купленно"
+            return True
         else:
-            return "не купленно"
+            return False
 
 
 
