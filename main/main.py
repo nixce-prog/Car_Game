@@ -1,11 +1,9 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from Player import Player
-player = None
+from functools import partial
 
-def buy(car):
-    global player
-    player.buy(car)
+player = None
 
 
 
@@ -44,6 +42,14 @@ def root1():
 
 
 def store():
+
+    def buy(car):
+        global player
+        player.info["money"] = 10000
+        print(player.info["car"])
+        if player.buy(car):
+            player.busy = 1
+
     store = Tk()
     store.title('Car Shop')
     store.geometry('800x450')
@@ -69,13 +75,17 @@ def store():
     Lb.place(x=380, y=60)
 
     buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
-                   width=9,command=lambda: buy("volvo"))
+                   width=9,command=partial(buy,"volvo"))
     buydg.place(x=180, y=280)
+    if player.busy == 1:
+        buydg.destroy()
     buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
                      width=9)
     buylamb.place(x=480, y=280)
     back = Button(store, text='Назад', command=rdestr, width=10, height=2)
     back.place(x=45, y=380)
+
+
     store.mainloop()
 
 
