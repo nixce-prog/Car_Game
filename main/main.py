@@ -47,10 +47,10 @@ def root1():
 
 def store():
 
+    a = {}
+
     def buy(car):
         global player
-        a = {'Dodge': buydg, 'Lamborgini': buylamb}
-        player.info["money"] = 1000
         player.buy(car)
         if player.info['car'][car] == True:
             a[car].destroy()
@@ -84,10 +84,13 @@ def store():
         buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
                        width=9, command=partial(buy, "Dodge"))
         buydg.place(x=180, y=280)
+        a["Dodge"] = buydg
     if player.info['car']['Lamborgini'] == False:
         buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red',activeforeground='white',
                          width=9, command=partial(buy, "Lamborgini"))
         buylamb.place(x=480, y=280)
+        a["Lamborgini"] = buylamb
+
 
     car_pho2 = Image.open(r'lambo.png')
     car_photo2 = ImageTk.PhotoImage(car_pho2)
@@ -143,7 +146,6 @@ def translate():
     log = login.get()
     pas = password.get()
     zapr = [" ",",","-","."]
-    print(all([log.count(x) < 4 for x in zapr]))
     if len(log)  >= 4 and len(pas) >= 4 and log != 'system' and all([log.count(x) < 4 for x in zapr]) and all([pas.count(x) < 4 for x in zapr]):
         player = Player(log, pas)
         if player.accaunt == 1:
