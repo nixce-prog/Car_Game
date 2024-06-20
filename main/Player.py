@@ -38,7 +38,7 @@ class Player():
                         else:
                             self.accaunt = 3
                     else:
-                        exit()
+                        self.accaunt = 4
 
                 else:
                     f.seek(0)
@@ -59,10 +59,27 @@ class Player():
 
         g = {x[0]:x[2] for x in Player.default}
         self.info = {x[0]:g[x[0]](x[1]) for x in info.items()}
+        self.login = login
+
+    def save(self):
+        with open("profile.json", "r+") as f:
+            s = json.load(f)
+            f.seek(0)
+            f.truncate()
+            s[self.login] = self.info
+            s["system"][self.login] = len(str(self.info))
+            json.dump(s, f)
+
+
 
     def buy(self,car):
         if self.info["money"] >= Player.car_all[car]:
+            self.info['money'] -= Player.car_all[car]
             self.info["car"][car] = True
-            return "купленно"
-        return "не хватает денег"
+            self.save()
+            print( "купленно" )
+        print( "не хватает денег" )
+
+
+
 
