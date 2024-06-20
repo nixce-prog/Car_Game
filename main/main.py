@@ -10,7 +10,7 @@ def buy(car):
 
 
 def root1():
-    root1 = Toplevel()
+    root1 = Tk()
     root1.title('Car Game')
     root1.geometry('800x450')
     root1.resizable(False, False)
@@ -44,7 +44,7 @@ def root1():
 
 
 def store():
-    store = Toplevel()
+    store = Tk()
     store.title('Car Shop')
     store.geometry('800x450')
     store['bg'] = 'grey'
@@ -82,7 +82,7 @@ def store():
 def roots():
     global player
 
-    root2 = Toplevel()
+    root2 = Tk()
     root2.title('Car Game')
     root2.geometry('800x450')
     root2.resizable(False, False)
@@ -124,13 +124,13 @@ def translate():
     if player.accaunt == 1:
         checkbtn.destroy()
         nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
-        fg='black', activebackground='green', activeforeground='white')# dest
+        fg='black', activebackground='green', activeforeground='white')
         nxbtn.place(x=360, y=310)
     elif player.accaunt == 2:
         reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
         reglb.place(x=15, y=20)
         nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
-                                   fg='black', activebackground='green', activeforeground='white')# dest
+                                   fg='black', activebackground='green', activeforeground='white')
         nxbtn.place(x=360, y=310)
 
 
