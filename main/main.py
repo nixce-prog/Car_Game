@@ -142,7 +142,9 @@ def translate():
     global player
     log = login.get()
     pas = password.get()
-    if len(log)  >= 4 and len(pas) >= 4 and log != 'system' and log.count(' ') < 4 and pas.count(' ') < 4 and log.count('-') < 4 and pas.count('-') < 4:
+    zapr = [" ",",","-","."]
+    print(all([log.count(x) < 4 for x in zapr]))
+    if len(log)  >= 4 and len(pas) >= 4 and log != 'system' and all([log.count(x) < 4 for x in zapr]) and all([pas.count(x) < 4 for x in zapr]):
         player = Player(log, pas)
         if player.accaunt == 1:
             checkbtn.destroy()
