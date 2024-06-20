@@ -123,14 +123,14 @@ def translate():
     player = Player(log, pas)
     if player.accaunt == 1:
         checkbtn.destroy()
-        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
-        fg='black', activebackground='green', activeforeground='white')
+        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
+        fg='black', activebackground='green', activeforeground='white')# dest
         nxbtn.place(x=360, y=310)
     elif player.accaunt == 2:
         reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
         reglb.place(x=15, y=20)
         nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
-                                   fg='black', activebackground='green', activeforeground='white')
+                                   fg='black', activebackground='green', activeforeground='white')# dest
         nxbtn.place(x=360, y=310)
 
 
