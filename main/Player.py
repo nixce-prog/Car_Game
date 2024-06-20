@@ -2,7 +2,17 @@ import json
 import os.path
 
 class Player():
-    default = [("money", 0, int), ("win", 0, str), ("password", "0000", str), ("bad", 0, int)]
+    car_all = {"volvo":100,
+               "maxbuk":1000
+               }
+
+    default = [("money", 0, int),
+                ("win", 0, int), 
+                ("password", "0000", str), 
+                ("bad", 0, int),
+                ("car",{x[0]:False for x in car_all.items()},dict)
+                ]
+    
     info_d = {x[0]: x[2](x[1]) for x in default}
 
     def __init__(self, login, password):
@@ -49,3 +59,10 @@ class Player():
 
         g = {x[0]:x[2] for x in Player.default}
         self.info = {x[0]:g[x[0]](x[1]) for x in info.items()}
+
+    def buy(self,car):
+        if self.info["money"] >= Player.car_all[car]:
+            self.info["car"][car] = True
+            return "купленно"
+        return "не хватает денег"
+
