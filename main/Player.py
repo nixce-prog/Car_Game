@@ -11,20 +11,24 @@ class Player():
             with open("profile.json", "r+") as f:
                 s = json.load(f)
                 if login in s:
-                    if s[login]["password"] == password:
-                        if len(s[login]) == len(Player.default) + 1:
-                            info = s[login]
+                    if s["system"][login] == len(str(s[login])):
+                        if s[login]["password"] == password:
+                            if len(s[login]) == len(Player.default) + 1:
+                                info = s[login]
+                            else:
+                                for x in Player.default:
+                                    if x[0] not in s[login]:
+                                        s[login][x[0]] = x[2](x[1])
+                                info = s[login]
+                                s["system"][login] = len(str(s[login]))
+                                f.seek(0)
+                                f.truncate()
+                                json.dump(s, f)
+                            self.accaunt = 1
                         else:
-                            for x in Player.default:
-                                if x[0] not in s[login]:
-                                    s[login][x[0]] = x[2](x[1])
-                            info = s[login]
-                            f.seek(0)
-                            f.truncate()
-                            json.dump(s, f)
-                        self.accaunt = 1
+                            self.accaunt = 3
                     else:
-                        self.accaunt = 3
+                        exit()
 
                 else:
                     f.seek(0)
@@ -32,6 +36,7 @@ class Player():
                     info = Player.info_d
                     info["password"] = password
                     s[login] = info
+                    s["system"][login] = len(str(info))
                     json.dump(s, f)
                     self.accaunt = 2
 
@@ -39,7 +44,7 @@ class Player():
             with open("profile.json", "w+") as f:
                 info = Player.info_d
                 info["password"] = password
-                json.dump({login: info}, f)
+                json.dump({login: info,"system":{login:len(str(info))}}, f)
                 self.accaunt = 2
 
         g = {x[0]:x[2] for x in Player.default}
