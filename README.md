@@ -2,7 +2,7 @@
 
 Hello Eweryone
 
-If you wont to install our project you need to downwload folder 'main' (all)
+If you want to install our project you need to downwload folder 'main' (all)
 and after start 'main.py'
 Create account and start playing!
 
