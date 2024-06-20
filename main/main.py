@@ -1,53 +1,6 @@
 from tkinter import *
-import os.path
 from PIL import Image, ImageTk
-import json
-
-class Player():
-    default = [("money", 0, int), ("win", 0, str), ("password", "0000", str), ("bad", 0, int)]
-    info_d = {x[0]: x[2](x[1]) for x in default}
-
-    def __init__(self, login, password):
-        info = {}
-        if os.path.isfile("profile.txt"):
-            with open("profile.txt", "r+") as f:
-                s = json.load(f)
-                if login in s:
-                    if s[login]["password"] == password:
-                        if len(s[login]) == len(Player.default) + 1:
-                            info = s[login]
-                        else:
-                            for x in Player.default:
-                                if x[0] not in s[login]:
-                                    s[login][x[0]] = x[2](x[1])
-                            info = s[login]
-                            f.seek(0)
-                            f.truncate()
-                            json.dump(s, f)
-                        checkbtn.destroy()
-                        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
-                                       fg='black', activebackground='green', activeforeground='white')
-                        nxbtn.place(x=360, y=310)
-                else:
-                    f.seek(0)
-                    f.truncate()
-                    info = Player.info_d
-                    info["password"] = password
-                    s[login] = info
-                    json.dump(s, f)
-                    reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
-                    reglb.place(x=15, y=20)
-                    nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
-                                   fg='black', activebackground='green', activeforeground='white')
-                    nxbtn.place(x=360, y=310)
-        else:
-            with open("profile.txt", "w+") as f:
-                info = Player.info_d
-                info["password"] = password
-                json.dump({login: info}, f)
-
-        g = {x[0]: x[2] for x in Player.default}
-        self.info = {x[0]: g[x[0]](info.get(x[0], x[1])) for x in info.items()}
+from Player import Player
 
 
 def root1():
@@ -58,7 +11,7 @@ def root1():
     root1.geometry('800x450')
     root1.resizable(False, False)
 
-    bg_image = Image.open('bg.png')
+    bg_image = Image.open(r'C:\Users\User\Desktop\Новая папка (9)\bg (1).png')
     bg_photo = ImageTk.PhotoImage(bg_image)
     bg_label = Label(root1, image=bg_photo)
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -76,7 +29,18 @@ def root1():
 def translate():
     log = login.get()
     pas = password.get()
-    Player(log, pas)
+    player = Player(log, pas)
+    if player.accaunt == 1:
+        checkbtn.destroy()
+        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
+        fg='black', activebackground='green', activeforeground='white')
+        nxbtn.place(x=360, y=310)
+    elif player.accaunt == 2:
+        reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
+        reglb.place(x=15, y=20)
+        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root1, bg='green',
+                                   fg='black', activebackground='green', activeforeground='white')
+        nxbtn.place(x=360, y=310)
 
 
 if __name__ == "__main__":
