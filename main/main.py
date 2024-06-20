@@ -3,11 +3,15 @@ from PIL import Image, ImageTk
 from Player import Player
 from functools import partial
 
+
 player = None
 
 
 
 def root1():
+
+
+
     root1 = Tk()
     root1.title('Car Game')
     root1.geometry('800x450')
@@ -45,14 +49,22 @@ def store():
 
     def buy(car):
         global player
-        player.info["money"] = 10000
-        print(player.info["car"])
-        if player.buy(car):
-            player.busy = 1
+        a = {'Dodge': buydg, 'Lamborgini': buylamb}
+        player.info["money"] = 1000
+        player.buy(car)
+        if player.info['car'][car] == True:
+            a[car].destroy()
+        else:
+            print('Сударь, идите пожалуйста на работу')
+
+
+
+
 
     store = Tk()
     store.title('Car Shop')
     store.geometry('800x450')
+    store.resizable(False, False)
     store['bg'] = 'grey'
 
     def rdestr():
@@ -68,20 +80,20 @@ def store():
     bg_photo = ImageTk.PhotoImage(bg_image)
     bg_label = Label(store, image=bg_photo, width=170)
     bg_label.place(x=80, y=60)
+    if player.info['car']['Dodge'] == False:
+        buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
+                       width=9, command=partial(buy, "Dodge"))
+        buydg.place(x=180, y=280)
+    if player.info['car']['Lamborgini'] == False:
+        buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red',activeforeground='white',
+                         width=9, command=partial(buy, "Lamborgini"))
+        buylamb.place(x=480, y=280)
 
     car_pho2 = Image.open(r'lambo.png')
     car_photo2 = ImageTk.PhotoImage(car_pho2)
     Lb = Label(store, image=car_photo2, width=170, height=130)
     Lb.place(x=380, y=60)
 
-    buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
-                   width=9,command=partial(buy,"volvo"))
-    buydg.place(x=180, y=280)
-    if player.busy == 1:
-        buydg.destroy()
-    buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
-                     width=9)
-    buylamb.place(x=480, y=280)
     back = Button(store, text='Назад', command=rdestr, width=10, height=2)
     back.place(x=45, y=380)
 
@@ -130,19 +142,21 @@ def translate():
     global player
     log = login.get()
     pas = password.get()
-    player = Player(log, pas)
-    if player.accaunt == 1:
-        checkbtn.destroy()
-        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
-        fg='black', activebackground='green', activeforeground='white')
-        nxbtn.place(x=360, y=310)
-    elif player.accaunt == 2:
-        reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
-        reglb.place(x=15, y=20)
-        nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
-                                   fg='black', activebackground='green', activeforeground='white')
-        nxbtn.place(x=360, y=310)
-
+    if len(log)  >= 4 and len(pas) >= 4 and log != 'system':
+        player = Player(log, pas)
+        if player.accaunt == 1:
+            checkbtn.destroy()
+            nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
+            fg='black', activebackground='green', activeforeground='white')
+            nxbtn.place(x=360, y=310)
+        elif player.accaunt == 2:
+            reglb = Label(root, text='Аккаунт был создан!', font=('italic', 14), bg='black', fg='white')
+            reglb.place(x=15, y=20)
+            nxbtn = Button(root, text='Продолжить', font=('Italic', 12), command=root_dest, bg='green',
+                                       fg='black', activebackground='green', activeforeground='white')
+            nxbtn.place(x=360, y=310)
+    else:
+        print('Введите корректный логин (от 4 символов)')
 
 if __name__ == "__main__":
     root = Tk()
