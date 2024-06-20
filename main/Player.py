@@ -77,8 +77,9 @@ class Player():
             self.info['money'] -= Player.car_all[car]
             self.info["car"][car] = True
             self.save()
-            print( "купленно" )
-        print( "не хватает денег" )
+            return "купленно"
+        else:
+            return "не купленно"
 
 
 
