@@ -3,8 +3,14 @@ from PIL import Image, ImageTk
 from Player import Player
 player = None
 
+def buy(car):
+    global player
+    player.buy(car)
+
+
+
 def root1():
-    root1 = Tk()
+    root1 = Toplevel()
     root1.title('Car Game')
     root1.geometry('800x450')
     root1.resizable(False, False)
@@ -13,6 +19,8 @@ def root1():
     def r_destr():
         root1.destroy()
         roots()
+
+
 
 
     def r2_destr():
@@ -36,7 +44,7 @@ def root1():
 
 
 def store():
-    store = Tk()
+    store = Toplevel()
     store.title('Car Shop')
     store.geometry('800x450')
     store['bg'] = 'grey'
@@ -61,7 +69,7 @@ def store():
     Lb.place(x=380, y=60)
 
     buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
-                   width=9)
+                   width=9,command=lambda: buy("volvo"))
     buydg.place(x=180, y=280)
     buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
                      width=9)
@@ -74,7 +82,7 @@ def store():
 def roots():
     global player
 
-    root2 = Tk()
+    root2 = Toplevel()
     root2.title('Car Game')
     root2.geometry('800x450')
     root2.resizable(False, False)
