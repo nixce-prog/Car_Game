@@ -2,47 +2,59 @@ from tkinter import *
 from PIL import Image, ImageTk
 from Player import Player
 from functools import partial
-
+import pygame
 
 player = None
 
 
 
+
+
+
 def root1():
+    menu = Tk()
+    menu.title('Car Game')
+    menu.geometry('800x450')
+    menu.resizable(False, False)
 
-
-
-    root1 = Tk()
-    root1.title('Car Game')
-    root1.geometry('800x450')
-    root1.resizable(False, False)
-
+    def race():
+        global player
+        print('Не готово')
+    #     menu.destroy()
+    #     pygame.init()
+    #     screen = pygame.display.set_mode((800, 450))
+    #
+    #     running = True
+    #     while running == True:
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 running = False
+    #                 pygame.quit()
+    #                 root1()
 
     def r_destr():
-        root1.destroy()
+        menu.destroy()
         roots()
 
 
-
-
     def r2_destr():
-        root1.destroy()
+        menu.destroy()
         store()
 
 
     bg_image = Image.open(r'bg.png')
     bg_photo = ImageTk.PhotoImage(bg_image)
-    bg_label = Label(root1, image=bg_photo)
+    bg_label = Label(menu, image=bg_photo)
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-    playbtn = Button(root1, text='Играть', font=('italic', 15), width=15, height=4)
+    playbtn = Button(menu, text='Играть', font=('italic', 15),command=race, width=15, height=4)
     playbtn.place(x=600, y=320)
-    storebtn = Button(root1, text='Магазин', font=('italic', 15),command=r2_destr, width=13, height=2)
+    storebtn = Button(menu, text='Магазин', font=('italic', 15),command=r2_destr, width=13, height=2)
     storebtn.place(x=621, y=250)
-    statsbtn = Button(root1, text='Статистика', font=('italic', 15),command=r_destr, width=12, height=2)
+    statsbtn = Button(menu, text='Статистика', font=('italic', 15),command=r_destr, width=12, height=2)
     statsbtn.place(x=25, y=366)
 
-    root1.mainloop()
+    menu.mainloop()
 
 
 def store():
@@ -56,9 +68,6 @@ def store():
             a[car].destroy()
         else:
             print('Сударь, идите пожалуйста на работу')
-
-
-
 
 
     store = Tk()
