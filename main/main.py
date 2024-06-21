@@ -3,6 +3,8 @@ from PIL import Image, ImageTk
 from Player import Player
 from functools import partial
 import pygame
+import random
+
 
 player = None
 
@@ -17,20 +19,127 @@ def root1():
     menu.geometry('800x450')
     menu.resizable(False, False)
 
-    def race():
+
+    def game():
         global player
-        print('Не готово')
-    #     menu.destroy()
-    #     pygame.init()
-    #     screen = pygame.display.set_mode((800, 450))
-    #
-    #     running = True
-    #     while running == True:
-    #         for event in pygame.event.get():
-    #             if event.type == pygame.QUIT:
-    #                 running = False
-    #                 pygame.quit()
-    #                 root1()
+        menu.destroy()
+        pygame.init()
+
+        window = pygame.display.set_mode((1200, 700))
+        Clok = pygame.time.Clock()
+
+        image = pygame.image.load("dggame.png")
+        image = pygame.transform.scale(image, (150, 50))
+        image2 = pygame.image.load("road.png")
+        image2 = pygame.transform.scale(image2, (1200, 700))
+
+        class sprite(object):
+
+            sprite_list = {}
+
+            def __init__(self, speed, size, image, x, y, max_speed, hard) -> None:
+                self.speed = speed
+                self.size = size
+                self.image = pygame.transform.scale(image, size)
+                self.image_old = image
+                self.x = x
+                self.y = y
+                self.max_speed = max_speed
+                self.max_speed_old = max_speed
+                self.hard = hard
+
+                sprite.sprite_list[self] = [self.image, [x, y]]
+
+            def obnow():
+                for x in sprite.sprite_list:
+                    x.image = pygame.transform.scale(x.image_old, x.size)
+                    sprite.sprite_list[x] = [x.image, [x.x, x.y]]
+
+            def exit():
+                sprite.sprite_list = {}
+
+        class player1(sprite):
+            pass
+
+        interesting = 100
+
+        s = player1(0, [150, 100], image, 100, 160, 220, 1)
+        g = sprite(0, (150, 100), image, 100, 250, 230, random.randrange(int(interesting / 2), interesting) / 100)
+        g = sprite(0, (150, 100), image, 100, 350, 222, random.randrange(int(interesting / 2), interesting) / 100)
+        g = sprite(0, (150, 100), image, 100, 450, 230, random.randrange(int(interesting / 2), interesting) / 100)
+
+        g_r = random.randrange(200) / 100
+
+        x_a = 0
+
+        runing = True
+
+        race_time = (60) / 2
+        Fps = 60
+        t = 0
+
+        while runing:
+            t += 1
+            keys = pygame.key.get_pressed()
+
+            x_a += s.speed
+            if x_a >= 1200:
+                x_a = 0
+
+            for x in sprite.sprite_list:
+                if x != s:
+                    x.x += x.speed - s.speed
+                    if x.speed < x.max_speed / 2:
+                        x.speed += x.max_speed / race_time / Fps * x.hard
+
+                else:
+                    if not keys[pygame.K_d]:
+                        if x.speed > 0:
+                            x.speed *= 0.995
+                    else:
+                        if s.speed < s.max_speed / 2:
+                            s.speed += s.max_speed / race_time / Fps
+
+            sprite.obnow()
+
+            window.blit(image2, (0 - x_a, 0))
+            window.blit(image2, (1200 - x_a, 0))
+
+            window.blits([*sprite.sprite_list.values()])
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    runing = False
+                    pygame.quit()
+            Clok.tick(Fps)
+            if t // 60 >= race_time:
+                p = [x[1] for x in sorted({x.x: x for x in sprite.sprite_list}.items())]
+                f = p.index(s)
+                player.info['money'] += f * interesting
+                player.info['win'] += 1
+                player.save()
+                runing = False
+                pygame.quit()
+
+                finish = Tk()
+                finish.title('Finish')
+                finish.geometry('300x300')
+
+                def finisher():
+                    finish.destroy()
+                    root1()
+
+                lb = Label(finish, text=f * interesting, font=('italic', 15), bg='white', fg='black')
+                lb.place(x=135, y=60)
+
+                btn = Button(finish, text='Назад',command=finisher, font=('italic', 10))
+                btn.place(x=160, y=100)
+
+                finish.mainloop()
+
+                return f * interesting
 
     def r_destr():
         menu.destroy()
@@ -47,7 +156,7 @@ def root1():
     bg_label = Label(menu, image=bg_photo)
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-    playbtn = Button(menu, text='Играть', font=('italic', 15),command=race, width=15, height=4)
+    playbtn = Button(menu, text='Играть', font=('italic', 15),command=game, width=15, height=4)
     playbtn.place(x=600, y=320)
     storebtn = Button(menu, text='Магазин', font=('italic', 15),command=r2_destr, width=13, height=2)
     storebtn.place(x=621, y=250)
@@ -90,12 +199,12 @@ def store():
     bg_label = Label(store, image=bg_photo, width=170)
     bg_label.place(x=80, y=60)
     if player.info['car']['Dodge'] == False:
-        buydg = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red', activeforeground='white',
+        buydg = Button(store, text='Бесплатно', bg='yellow', fg='green', activebackground='red', activeforeground='white',
                        width=9, command=partial(buy, "Dodge"))
         buydg.place(x=180, y=280)
         a["Dodge"] = buydg
     if player.info['car']['Lamborgini'] == False:
-        buylamb = Button(store, text='Купить', bg='yellow', fg='green', activebackground='red',activeforeground='white',
+        buylamb = Button(store, text='1000ввввввввввввввввв', bg='yellow', fg='green', activebackground='red',activeforeground='white',
                          width=9, command=partial(buy, "Lamborgini"))
         buylamb.place(x=480, y=280)
         a["Lamborgini"] = buylamb
